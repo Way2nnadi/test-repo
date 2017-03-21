@@ -11,10 +11,10 @@ server.get('/', (req, res) => {
 })
 
 server.post('/receive/github', (req, res) => {
-  console.log(req.body)
 
   let payload = req.body
 
+  console.log(payload)
   if (payload.actions === 'closed') {
 
     // fire the code the asana code
@@ -27,13 +27,13 @@ server.post('/receive/github', (req, res) => {
 
 server.post('/create/webhook', (req, res) => {
   // `https://api.github.com/repos/:owner/:repo/hooks`
-  let uri = "https://api.github.com/repos/way2nnadi/test-repo";
+  let uri = "https://api.github.com/repos/way2nnadi/web/hooks";
 
   // endpoint that receives payload
   let callBackUri = "https://055c16a0.ngrok.io/receive/github";
 
   // personal token generate via github settings
-  let personalToken = "552e2e193755f0d0a9986a60600b57698f6a1c2c";
+  let personalToken = "f81eb9ed1d8583cbd1ff5d4d4b11fc3b16999f2a";
 
   let options = {
     uri: uri,
