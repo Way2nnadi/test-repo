@@ -17,16 +17,20 @@ server.post('/receive/github', (req, res) => {
 
   let payload;
 
+  req.setEncoding('utf8');
+
   req.on('data', (chunk) => {
+    console.log(chunk)
       payload += chunk;
     });
 
   // the end event indicates that the entire body has been received
   req.on('end', () => {
+    console.log('end');
     try {
       const data = JSON.parse(payload);
       // write back something interesting to the user:
-      console.log(payload);
+      console.log(data);
       res.send('ok');
 
     } catch (er) {
@@ -35,6 +39,10 @@ server.post('/receive/github', (req, res) => {
       return res.end(`error: ${er.message}`);
     }
   });
+
+  req.on('finish', () => {
+    console.log('finish')
+  })
 
 })
 
