@@ -14,14 +14,14 @@ server.post('/receive/github', (req, res) => {
 
   let payload = req.body
 
-  console.log(payload)
-  if (payload.actions === 'closed') {
+  console.log(req)
+  // if (payload.actions === 'closed') {
 
-    // fire the code the asana code
+  //   // fire the code the asana code
 
-    // respondOnAsana(pr)
+  //   // respondOnAsana(pr)
 
-  }
+  // }
   res.send('ok');
 })
 
