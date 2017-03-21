@@ -12,17 +12,27 @@ server.get('/', (req, res) => {
 
 server.post('/receive/github', (req, res) => {
 
-  let payload = req.body
+  let payload;
 
-  console.log(req)
-  // if (payload.actions === 'closed') {
+  req.on('data', (chunk) => {
+      payload += chunk;
+    });
 
-  //   // fire the code the asana code
+  // the end event indicates that the entire body has been received
+  req.on('end', () => {
+    try {
+      const data = JSON.parse(payload);
+      // write back something interesting to the user:
+      console.log(payload);
+      res.send('ok');
 
-  //   // respondOnAsana(pr)
+    } catch (er) {
+      // uh oh!  bad json!
+      res.statusCode = 400;
+      return res.end(`error: ${er.message}`);
+    }
+  });
 
-  // }
-  res.send('ok');
 })
 
 server.post('/create/webhook', (req, res) => {
