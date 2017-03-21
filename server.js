@@ -4,6 +4,9 @@ let express = require('express');
 let server = express(); 
 let rp = require('request-promise'); 
 
+// personal token generate via github settings
+let personalToken = "";
+
 
 server.get('/', (req, res) => {
   console.log(req.body)
@@ -42,9 +45,6 @@ server.post('/create/webhook', (req, res) => {
   // endpoint that receives payload
   let callBackUri = "https://055c16a0.ngrok.io/receive/github";
 
-  // personal token generate via github settings
-  let personalToken = "f81eb9ed1d8583cbd1ff5d4d4b11fc3b16999f2a";
-
   let options = {
     uri: uri,
     method: 'POST',
@@ -53,6 +53,7 @@ server.post('/create/webhook', (req, res) => {
       "active": true,
       "events": [
         "push",
+        "create",
         "pull_request"
       ],
       "config": {
@@ -74,9 +75,62 @@ server.post('/create/webhook', (req, res) => {
       console.log(data);
       res.send(data)
     })
+    .catch(err => {
+      res.send(err)
+    })
 })
 
+server.get('/get/webhook', (req, res) => {
+  // `https://api.github.com/repos/:owner/:repo/hooks`
+  let uri = "https://api.github.com/repos/way2nnadi/web/hooks";
 
+  let options = {
+    uri: uri,
+    method: 'GET',
+    headers: {
+        'User-Agent': 'Request-Promise',
+        'Authorization': 'token ' + personalToken
+    },
+    json: true
+  }
+
+  // make request to github api endpoint 
+  // creates webhook
+  rp(options)
+    .then(data => {
+      console.log(data);
+      res.send(data)
+    })
+    .catch(err => {
+      res.send(err)
+    })
+})
+
+server.get('/delete/webhook', (req, res) => {
+  // `https://api.github.com/repos/:owner/:repo/hooks`
+  let uri = "https://api.github.com/repos/way2nnadi/web/hooks/12751751";
+
+  let options = {
+    uri: uri,
+    method: 'DELETE',
+    headers: {
+        'User-Agent': 'Request-Promise',
+        'Authorization': 'token ' + personalToken
+    },
+    json: true
+  }
+
+  // make request to github api endpoint 
+  // creates webhook
+  rp(options)
+    .then(data => {
+      console.log(data);
+      res.send(data)
+    })
+    .catch(err => {
+      res.send(err)
+    })
+})
 // HELPER FUNCTIONS
 
 function respondOnAsana(pr) {
